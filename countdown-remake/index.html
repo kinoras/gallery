@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;500&family=Oswald:wght@400;500&display=swap">
+    <style>
+        @font-face { font-family: 'Segment'; src: url('./dseg7-cm-bolditalic.woff2') format('woff2'); }
+        .mplus { font-family: 'M PLUS 1p', sans-serif; }
+        .oswald { font-family: 'Oswald', sans-serif; }
+        .segment { font-family: 'Segment', 'Courier New', Courier, monospace; }
+    </style>
+    <title>Document</title>
+</head>
+<body class="h-screen bg-gray-950 text-white">
+    <div id="root" class="h-screen flex flex-col px-4 py-8"></div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/dayjs@1.11.10/dayjs.min.js"></script>
+    <script type="text/babel">
+        const { memo } = React
+
+        const targetDays = [
+            {
+                id: 1,
+                countNameZh: '學期結束',
+                countNameEn: 'End of Semester',
+                timeName: '寒假開始',
+                dayString: '2023-12-23 00:00:00'
+            }
+        ]
+
+        const App = () => {
+            const { useState, useEffect } = React
+            const [currTime, setCurrTime] = useState(dayjs().format('YYYY-MM-DD HH:mm'))
+            
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setCurrTime(dayjs().format('YYYY-MM-DD HH:mm'))
+                }, 1000)
+                return () => clearInterval(interval)
+            }, [])
+
+            return  (<>
+                <div className={`h-[${targetDays.length * 58}px] md:h-[${targetDays.length * 72}px] lg:h-[${targetDays.length * 86}px]`}></div>
+                <div id='countdown-items' className='flex flex-col flex-1 justify-center gap-10'>
+                    {targetDays.map(({ id, countNameZh, countNameEn, dayString }, index) => (
+                        <CountdownItem
+                            key={id}
+                            currTime={currTime}
+                            countNameZh={countNameZh}
+                            countNameEn={countNameEn}
+                            dayString={dayString}
+                        />
+                    ))}
+                </div>
+                <div id='time-items'>
+                    <TimeItem timeName='現在時間' dayString={currTime}/>
+                    {targetDays.map(({ id, timeName, dayString }, index) => (
+                        <TimeItem
+                            key={id}
+                            timeName={timeName}
+                            dayString={dayString}
+                        />
+                    ))}
+                </div>
+            </>)
+        }
+
+        const formatDiff = (diff) => (diff > -99 && diff < 999) ? diff : (diff > 0) ? 999 : -99
+
+        const BilingText = ({ textZh, textEn, className = '' }) =>  (
+            <span className={className}>
+                <label className='block text-3xl tracking-widest mplus pb-0 md:text-4xl md:pb-1 lg:text-5xl lg:pb-2'>{textZh}</label>
+                <label className='block text-xl tracking-wide oswald uppercase md:text-2xl lg:text-3xl'>{textEn}</label>
+            </span>
+        )
+
+        const Segment = memo(({ className = '', textClassName = '', text, placeholder }) => (
+            <div className={`bg-gray-800 relative flex rounded md:rounded-lg ${className}`}>
+                <span className={`segment text-red-500 leading-none absolute whitespace-pre ${textClassName}`}>{text}</span>
+                <span className='segment text-gray-900 leading-none select-none whitespace-pre print:invisible'>{placeholder}</span>
+            </div>
+        ))
+
+        const CountdownItem = memo(({ currTime, countNameZh, countNameEn, dayString }) => (
+            <div className='flex justify-center items-center gap-3 md:gap-4 lg:gap-5'>
+                <BilingText className='mr-1 md:mr-2 lg:mr-3' textZh={countNameZh} textEn={countNameEn} />
+                <Segment
+                    className='p-3 text-5xl md:p-4 md:text-6xl lg:p-5 lg:text-7xl'
+                    textClassName='right-3 md:right-4 lg:right-5'
+                    text={formatDiff(Math.ceil(dayjs(dayString).diff(dayjs(currTime), 'day', true)))}
+                    placeholder='888'
+                />
+                <BilingText textZh='日' textEn='Day(s)'/>
+            </div>
+        ))
+
+        const TimeItem = memo(({ timeName, dayString }) => (
+            <div className='flex justify-center items-center pt-6 text-lg gap-2 md:text-2xl md:gap-3 lg:text-3xl lg:gap-4'>
+                <span className='tracking-widest mplus'>{timeName}</span>
+                <Segment
+                    className='p-2 md:p-3 lg:p-4'
+                    text={dayjs(dayString).format(`YYYY-MM-DD   HH : mm`)}
+                    placeholder='8888-88-88   88 : 88'
+                />
+            </div>
+        ))
+
+        ReactDOM.render(<App/>, document.querySelector("#root"))
+    </script>
+</body>
+</html>
