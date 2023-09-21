@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qrcode Remake | kinoRAS</title>
+</head>
+<body class="h-full bg-slate-100 p-4 pt-16 before:absolute before:inset-x-0 before:top-0 before:h-36 before:bg-slate-200 before:-z-10 dark:bg-slate-900 dark:before:bg-slate-950 dark:before:opacity-75">
+    <div id="root" class="w-full max-w-3xl mx-auto bg-white shadow-md flex flex-col sm:flex-row gap-4 rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-4 md:p-6 dark:bg-slate-800">
+        <main class="flex-1 p-2">
+            <h1 class="font-bold mb-6 text-3xl sm:text-4xl md:text-4xl dark:text-slate-200">QRCode Generator</h1>
+            <h3 class="font-semibold mb-2 text-md sm:text-lg md:text-xl dark:text-slate-200">Text</h3>
+            <input
+                id="text" type="text" value="" style="transition-property: border-bottom-color;" autofocus
+                class="px-0 pt-1 pb-2 m-0 mb-4 block text-lg w-full bg-transparent border-0 border-b-2 duration-200 appearance-none focus:outline-none focus:ring-0 border-slate-200 focus:border-slate-900 dark:text-slate-200 dark:placeholder-slate-500 dark:border-slate-600 dark:focus:border-slate-300"
+            />
+            <h3 class="font-semibold mb-2 text-md sm:text-lg md:text-xl dark:text-slate-200">User Guide</h3>
+            <ul class="dark:text-slate-400">
+                <li class="mb-1">Enter the text you would like to convert.</li>
+                <li class="mb-1">Mouseout the textbox or press "Enter".</li>
+                <li class="mb-1">The QR code will be shown at the right.</li>
+            </ul>
+        </main>
+        <div id="qr-code-container" class="p-4 md:p-s6 self-center sm:self-start aspect-square w-full max-w-[240px] sm:w-48 md:w-60 mb-2 rounded md:rounded-md border border-slate-200 dark:border-slate-600">
+            <div id="qrcode-light" class="block dark:hidden"></div>
+            <div id="qrcode-dark" class="hidden dark:block"></div>
+        </div>
+    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src='https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js'></script>
+    <script>
+        const codeInput = document.getElementById('text')
+        const defaultCode = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+
+        const codeLight = new QRCode('qrcode-light', { text: defaultCode, colorDark : '#000000', colorLight : '#ffffff' })
+        const codeDark = new QRCode('qrcode-dark', { text: defaultCode, colorDark : '#e2e8f0', colorLight : '#1e293b' })
+ 
+        const makeCode = () => {
+            codeLight.makeCode(codeInput?.value ? codeInput.value : defaultCode)
+            codeDark.makeCode(codeInput?.value ? codeInput.value : defaultCode)
+        }
+
+        document.addEventListener('DOMContentLoaded', makeCode)
+        codeInput.addEventListener('blur', makeCode)
+        codeInput.addEventListener('keydown', () => { if (e.keyCode === 13) makeCode() })
+        codeInput.placeholder = defaultCode
+    </script>
+</body>
+</html>
