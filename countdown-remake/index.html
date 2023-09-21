@@ -12,10 +12,10 @@
         .oswald { font-family: 'Oswald', sans-serif; }
         .segment { font-family: 'Segment', 'Courier New', Courier, monospace; }
     </style>
-    <title>Document</title>
+    <title>Countdown Remake | kinoRAS</title>
 </head>
-<body class="h-screen bg-gray-950 text-white">
-    <div id="root" class="h-screen flex flex-col px-4 py-8"></div>
+<body class="h-full bg-gray-950 text-white">
+    <div id="root" class="h-full flex flex-col px-4 py-8"></div>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -71,7 +71,7 @@
             </>)
         }
 
-        const formatDiff = (diff) => (diff > -99 && diff < 999) ? diff : (diff > 0) ? 999 : -99
+        const formatDiff = (diff) => (diff > -9 && diff < 99) ? diff : (diff > 0) ? 99 : -9
 
         const BilingText = ({ textZh, textEn, className = '' }) =>  (
             <span className={className}>
@@ -94,7 +94,7 @@
                     className='p-3 text-5xl md:p-4 md:text-6xl lg:p-5 lg:text-7xl'
                     textClassName='right-3 md:right-4 lg:right-5'
                     text={formatDiff(Math.ceil(dayjs(dayString).diff(dayjs(currTime), 'day', true)))}
-                    placeholder='888'
+                    placeholder='88'
                 />
                 <BilingText textZh='日' textEn='Day(s)'/>
             </div>
