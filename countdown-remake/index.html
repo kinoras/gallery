@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;500&family=Oswald:wght@400;500&display=swap">
     <style>
+        html { height: 100%; }
         @font-face { font-family: 'Segment'; src: url('./dseg7-cm-bolditalic.woff2') format('woff2'); }
         .mplus { font-family: 'M PLUS 1p', sans-serif; }
         .oswald { font-family: 'Oswald', sans-serif; }
@@ -45,7 +46,7 @@
                 return () => clearInterval(interval)
             }, [])
 
-            return  (<>
+            return (<>
                 <div className={`h-[${targetDays.length * 58}px] md:h-[${targetDays.length * 72}px] lg:h-[${targetDays.length * 86}px]`}></div>
                 <div id='countdown-items' className='flex flex-col flex-1 justify-center gap-10'>
                     {targetDays.map(({ id, countNameZh, countNameEn, dayString }, index) => (
